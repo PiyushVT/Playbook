@@ -1,184 +1,92 @@
-<!doctype html>
-<html lang="en-us">
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, user-scalable=no"
-    />
-    <title>Playbook Rubi</title>
-    <link rel="shortcut icon" href="TemplateData/favicon.ico" />
-    <link rel="stylesheet" href="TemplateData/style.css" />
-    <style>
-      html,
-      body {
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: black;
-      }
+<!DOCTYPE html>
+<html lang="en">
 
-      #unity-container {
-        position: relative;
-        width: 100vw;
-        height: 56.25vw; /* 16:9 aspect ratio */
-        max-width: 177.78vh; /* 16:9 aspect ratio */
-        max-height: 100vh;
-        background-color: black;
-      }
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="description" content="HTML5 Game Scaffold">
+    <title>Word Flow Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
 
-      #unity-canvas {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        left: 0;
-        top: 0;
-      }
+<body>
+    <div id="game-container">
+        <div class="root">
+            <!-- Health Bar -->
+            <div class="health-bar">
+                <div class="segment red"></div>
+                <div class="segment orange"></div>
+                <div class="segment yellow"></div>
+                <div class="segment green"></div>
+            </div>
 
-      /* --- NEW CSS ADDED HERE --- */
-      #loading-cover {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: black; /* Black background */
-        z-index: 99; /* Ensure it covers the canvas */
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-      /* -------------------------- */
+            <!-- Coins Counter -->
+            <div class="coin-counter">
+                <div class="coin-img"></div>
+                <span class="coin-value">0</span>
+            </div>
 
-      /* MODIFIED: Width set to 300px */
-      #unity-loading-bar {
-        /* Since the parent (#loading-cover) is now a flex container, 
-           we can remove absolute positioning here or keep it. 
-           Keeping absolute for safety to match your original logic 
-           but the parent handles the background now. */
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        width: 300px;
-        z-index: 100;
-      }
+            <!-- Word display -->
+            <div class="word-outer">
+                <div class="word-header">
+                    <span>WORD MATCH</span>
+                    <div class="badge">0</div>
+                </div>
 
-      /* MODIFIED: Ensure the bar fills the container */
-      #unity-progress-bar-empty {
-        width: 100%;
-        height: 20px;
-        background-color: #333;
-        border: 1px solid white;
-        margin-top: 10px;
-        border-radius: 4px;
-      }
+                <div class="word-inner">
+                    <div class="letters">
+                    </div>
+                </div>
+            </div>
 
-      #unity-progress-bar-full {
-        width: 0%;
-        height: 100%;
-        background-color: white;
-        border-radius: 2px;
-      }
+            <!-- Level Complete Screen -->
+            <div class="level-complete-screen">
+                <div class="gradient-div">
+                    <div class="inner-div">
 
-      .spinner {
-        width: 30px;
-        height: 30px;
-        border: 4px solid rgba(255, 255, 255, 0.3);
-        border-left-color: white;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-      }
+                        <div class="level-complete-text-div">
+                            <div class="radial-gradient"></div>
 
-      @keyframes spin {
-        0% {
-          transform: rotate(0deg);
-        }
-        100% {
-          transform: rotate(360deg);
-        }
-      }
-    </style>
-  </head>
-  <body class="dark">
-    <div id="unity-container" class="unity-desktop">
-      <canvas id="unity-canvas"></canvas>
-    </div>
+                            <span class="level-complete-text-span-1">
+                                LEVEL
+                            </span>
 
-    <div id="loading-cover" style="display: none">
-      <div id="unity-loading-bar">
-        <div class="spinner"></div>
-        <div id="unity-progress-bar-empty" style="display: none">
-          <div id="unity-progress-bar-full"></div>
+                            <span class="level-complete-text-span-2 outlined" data-text="COMPLETE">
+                                COMPLETE
+                            </span>
+
+                            <img src="./assets/sprites/cloud-1.webp" class="cloud-imgs cloud-img1">
+                        </div>
+
+                        <div class="score-text-div">
+                            <span class="score-text outlined" data-text="Score :">
+                                Score :
+                            </span>
+
+                            <span class="score-value outlined" data-text="25">
+                                25
+                            </span>
+                        </div>
+
+                        <div class="coins-collected-div">
+                            <div class="coin-div coin-div-1"></div>
+                            <div class="coin-div coin-div-2"></div>
+                            <div class="white-bg"></div>
+                            <span class="coins-collected-text" data-text="2500">2500</span>
+                        </div>
+
+                        <button class="replay-button outlined" data-text="REPLAY">
+                            REPLAY
+                        </button>
+
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
+        <canvas id="canvas"></canvas>
     </div>
+    <script src="./script.js" type="module"></script>
+</body>
 
-    <script>
-            const buildUrl = "Build";
-            const loaderUrl = buildUrl + "/4e7d2798ca836c53d2ee4b879340f874.loader.js";
-            const config = {
-              dataUrl: buildUrl + "/36e4c2e816aeeafd95b44590b227c04d.data.unityweb",
-              frameworkUrl: buildUrl + "/0a51e55a1217984ab33f35c7b209c037.framework.js.unityweb",
-              codeUrl: buildUrl + "/2c750f3a3a4151df7f0448a050f0e589.wasm.unityweb",
-              streamingAssetsUrl: "StreamingAssets",
-              companyName: "VT",
-              productName: "Playbook Rubi",
-              productVersion: "0.1.0",
-            };
-
-            const container = document.querySelector("#unity-container");
-            const canvas = document.querySelector("#unity-canvas");
-            const loadingCover = document.querySelector("#loading-cover");
-            const progressBarEmpty = document.querySelector("#unity-progress-bar-empty");
-            const progressBarFull = document.querySelector("#unity-progress-bar-full");
-            const spinner = document.querySelector('.spinner');
-
-            if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-              container.className = "unity-mobile";
-              config.devicePixelRatio = 1;
-            }
-
-            loadingCover.style.display = "";
-
-            const script = document.createElement("script");
-            script.src = loaderUrl;
-            var myGameInstance = null;
-            script.onload = () => {
-              createUnityInstance(canvas, config, (progress) => {
-                // Show progress bar and update width
-                spinner.style.display = "";
-                progressBarEmpty.style.display = "";
-                progressBarFull.style.width = `${100 * progress}%`;
-              }).then((unityInstance) => {
-                // Delay to hide Made with Unity Splash
-                 myGameInstance = unityInstance;
-                setTimeout(() => {
-                  loadingCover.style.display = "none";
-                }, 500);
-              }).catch((message) => {
-                alert(message);
-              });
-
-              window.addEventListener("message", function(event) {
-                // Check if we have a game instance and the data is meant for us
-                if (myGameInstance && event.data.type === "FROM_ANGULAR") {
-                    // SendMessage(GameObject, MethodName, Value)
-                    myGameInstance.SendMessage('Api', 'ReceiveData', event.data.payload);
-                }
-              });
-            };
-
-            document.body.appendChild(script);
-    </script>
-  </body>
 </html>
