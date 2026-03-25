@@ -6,6 +6,7 @@ import FallingCoin from "../FallingCoin.js";
 export default class SpawnManager {
     constructor(difficultyManager, wordManager, sizes, cloudsSpawner) {
         this.main = new Main();
+        this.eventEmitter = this.main.eventEmitter;  
         this.ctx = this.main.ctx;
 
         this.difficultyManager = difficultyManager;
@@ -24,9 +25,63 @@ export default class SpawnManager {
         this.laneWeightDecay = 0.5;
 
         this.coinChance = GAME_CONFIG.spawning.coinChance;
+
+        this.canSpawn = false;
+        this.popupShown = false;
+
+        this.eventEmitter.on('player.dragged', () => {
+            this.startSpawning();
+        });
+    }
+
+    startSpawning() {
+        if(this.canSpawn) return;
+        this.canSpawn = true;
+        this.showPopup();
+    }
+
+    showPopup(){
+        const popup = document.createElement('div');
+        popup.textContent = "How many words you can collect?";
+        Object.assign(popup.style, {
+            position: 'absolute',
+            left: '50%',
+            bottom: '25%',
+            transform: 'translateX(-50%)',
+            fontFamily: "'Fredoka', sans-serif",
+            color: 'white',
+            fontSize: '32px',
+            fontWeight: '900',
+            textAlign: 'center',
+            pointerEvents: 'none',
+            zIndex: '1000',
+            opacity: '0',
+            width: '90%',
+            textShadow: '4px 4px 8px rgba(0, 0, 0, 1)',
+        });
+
+        const root = document.querySelector('.root') || document.body;
+        root.appendChild(popup);
+
+        const animation = popup.animate([
+            { opacity: 0, transform: 'translate(-50%, 50px)' },
+            { opacity: 1, transform: 'translate(-50%, 0)' },
+            { opacity: 1, transform: 'translate(-50%, 0)', offset: 0.8 },
+            { opacity: 0, transform: 'translate(-50%, -50px)' }
+        ], {
+            duration: 3500,
+            easing: 'ease-out',
+            fill: 'forwards'
+        });
+
+        animation.onfinish = () => {
+            popup.remove();
+            this.popupShown = true;
+        };
     }
 
     update(dt) {
+        if (!this.canSpawn || !this.popupShown) return;
         this.timer += dt;
 
         if (this.timer >= this.interval) {

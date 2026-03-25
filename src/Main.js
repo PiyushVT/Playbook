@@ -61,6 +61,7 @@ export default class Main {
             this.laneSpawner = new LaneSpawner();
             this.playerController = new PlayerController();
             this.input = new Input(this.playerController);
+
             this.wordLoader = new WordLoader();
             this.uiManager = new UIManager();
             this.uiManager.init();

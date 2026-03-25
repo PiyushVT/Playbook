@@ -31,7 +31,7 @@ export default class Input {
 
         const dx = e.clientX - this.lastX;
         this.lastX = e.clientX;
-
+        this.main.eventEmitter.trigger('player.dragged');
         this.player.onDrag(dx);
     };
 

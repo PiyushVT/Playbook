@@ -481,8 +481,8 @@ canvas {
 }
 
 
-@media (max-width:380px) {
+@media (max-width:380px) or (max-height: 734px) {
     .word-outer {
-        transform: translateX(-50%) scale(0.8);
+        transform: translateX(-50%) scale(0.78);
     }
 }

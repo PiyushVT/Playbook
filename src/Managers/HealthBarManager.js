@@ -46,14 +46,28 @@ export default class HealthBarManager {
 
         this.maxHealth = this.segmentClasses.length;
         this.currentHealth = this.maxHealth;
+        
+        this.container.style.opacity = "0";
+        this.container.style.transition = "opacity 0.3s ease";
+        this.segments = segments;
+        this.hasAnimated = false;
 
-        // Animate sequence (total 1s)
-        const step = 1000 / segments.length;
-        segments.forEach((el, i) => {
-            setTimeout(() => {
-                el.style.transform = "scaleX(1)";
-            }, i * step);
-        });
+        if (!this.listenerAdded) {
+            this.listenerAdded = true;
+            this.eventEmitter.on("player.dragged", () => {
+                if (!this.hasAnimated) {
+                    this.hasAnimated = true;
+                    this.container.style.opacity = "1";
+                    
+                    const step = 1000 / this.segments.length;
+                    this.segments.forEach((el, i) => {
+                        setTimeout(() => {
+                            el.style.transform = "scaleX(1)";
+                        }, i * step);
+                    });
+                }
+            });
+        }
     }
 
     reduce(amount = 1) {

@@ -4,12 +4,14 @@ import { GAME_CONFIG } from "../configs/GameConfig.js";
 export default class PlayerController {
     constructor() {
         this.main = new Main();
+        this.eventEmitter = this.main.eventEmitter;  
         this.sizes = this.main.sizes;
         this.assets = this.main.assets;
         this.ctx = this.main.ctx;
         this.laneSpawner = this.main.laneSpawner;
         // Asset
         this.basketImage = this.assets.basket;
+        this.handImage = this.assets.hand;
 
         // Movement config
         this.laneCount = GAME_CONFIG.lanes.laneCount;
@@ -39,8 +41,16 @@ export default class PlayerController {
         this.isDragInverted = false;
 
         this.idleOffsetY = 0;
+        
+        this.state = 'Auto';
 
         this.resize(this.sizes.width, this.sizes.height);
+
+        this.eventEmitter.on('player.dragged', () => {
+            if (this.state === 'Auto') {
+                this.state = 'Manual';
+            }
+        });
     }
 
     resize(width, height) {
@@ -60,6 +70,14 @@ export default class PlayerController {
             this.h = this.w * aspect;
         } else {
             this.h = this.w * 0.6;
+        }
+
+        if (this.handImage && this.handImage.naturalWidth) {
+            const handAspect =
+                this.handImage.naturalHeight / this.handImage.naturalWidth;
+            this.handH = this.w * handAspect;
+        } else {
+            this.handH = this.w;
         }
 
         this.x = (width - this.w) / 2;
@@ -99,6 +117,13 @@ export default class PlayerController {
     }
 
     handleMovement(dt) {
+        if (this.state === 'Auto') {
+            const t = performance.now() * 0.002;
+            const amplitude = (this.maxX - this.minX) / 2;
+            const centerX = this.minX + amplitude;
+            this.targetX = centerX + Math.sin(t) * amplitude;
+        }
+
         const speed =
             this.globalSpeedMultiplier * 1000 * dt;
 
@@ -142,6 +167,7 @@ export default class PlayerController {
             this.y + this.h / 2 + this.idleOffsetY
         );
 
+        this.ctx.save();
         this.ctx.rotate((this.currentTilt * Math.PI) / 180);
 
         this.ctx.drawImage(
@@ -151,6 +177,27 @@ export default class PlayerController {
             this.w,
             this.h
         );
+        this.ctx.restore();
+
+        if (this.state === 'Auto' && this.handImage) {
+            this.ctx.save();
+            const scale = 1 + Math.sin(performance.now() * 0.005) * 0.1;
+            const cx = this.w / 2;
+            const cy = this.handH / 3;
+
+            this.ctx.translate(cx, cy);
+            this.ctx.scale(scale, scale);
+            this.ctx.rotate(-30 * Math.PI / 180);
+
+            this.ctx.drawImage(
+                this.handImage,
+                -this.w / 2,
+                -this.handH / 2,
+                this.w,
+                this.handH
+            );
+            this.ctx.restore();
+        }
 
         this.ctx.restore();
     }
