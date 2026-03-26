@@ -4,5 +4,6 @@ export const ASSETS = {
         cloud: './assets/sprites/cloud.webp',
         spritesheet: './assets/sprites/spritesheet.webp',
         hand: './assets/sprites/WordeFlowHand.png',
+        popup: './assets/SVG/popup.svg',
     },
 };

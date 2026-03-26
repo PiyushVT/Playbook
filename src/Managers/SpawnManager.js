@@ -2,6 +2,7 @@ import FallingLetter from "../FallingLetter.js";
 import { GAME_CONFIG } from "../../configs/GameConfig.js";
 import Main from "../Main.js";
 import FallingCoin from "../FallingCoin.js";
+import { ASSETS } from "../../sources.js";
 
 export default class SpawnManager {
     constructor(difficultyManager, wordManager, sizes, cloudsSpawner) {
@@ -40,36 +41,34 @@ export default class SpawnManager {
         this.showPopup();
     }
 
-    showPopup(){
-        const popup = document.createElement('div');
-        popup.textContent = "How many words you can collect?";
+    showPopup() {
+        const popup = document.createElement('img');
+        
         Object.assign(popup.style, {
             position: 'absolute',
             left: '50%',
-            bottom: '25%',
-            transform: 'translateX(-50%)',
-            fontFamily: "'Fredoka', sans-serif",
-            color: 'white',
-            fontSize: '32px',
-            fontWeight: '900',
-            textAlign: 'center',
+            top: '50%',
+            transform: 'translate(-50%, -50%)',
             pointerEvents: 'none',
             zIndex: '1000',
             opacity: '0',
-            width: '90%',
-            textShadow: '4px 4px 8px rgba(0, 0, 0, 1)',
+            width: '98%',
+            maxWidth: '600px',
+            objectFit: 'contain'
         });
+        
+        popup.src = ASSETS.images.popup;
 
         const root = document.querySelector('.root') || document.body;
         root.appendChild(popup);
 
         const animation = popup.animate([
-            { opacity: 0, transform: 'translate(-50%, 50px)' },
-            { opacity: 1, transform: 'translate(-50%, 0)' },
-            { opacity: 1, transform: 'translate(-50%, 0)', offset: 0.8 },
-            { opacity: 0, transform: 'translate(-50%, -50px)' }
+            { opacity: 0, transform: 'translate(-50%, calc(-50vh - 100%))' },
+            { opacity: 1, transform: 'translate(-50%, -50%)', offset: 0.15 },
+            { opacity: 1, transform: 'translate(-50%, -50%)', offset: 0.85 },
+            { opacity: 0, transform: 'translate(-50%, calc(50vh + 100%))' }
         ], {
-            duration: 3500,
+            duration: 4500,
             easing: 'ease-out',
             fill: 'forwards'
         });
