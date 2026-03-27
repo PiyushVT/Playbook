@@ -1,5 +1,6 @@
 import Main from "./Main.js";
 import { GAME_CONFIG } from "../configs/GameConfig.js";
+import { STORAGE_KEYS } from "../sources.js";
 
 export default class PlayerController {
     constructor() {
@@ -42,15 +43,20 @@ export default class PlayerController {
 
         this.idleOffsetY = 0;
         
-        this.state = 'Auto';
-
         this.resize(this.sizes.width, this.sizes.height);
 
-        this.eventEmitter.on('player.dragged', () => {
-            if (this.state === 'Auto') {
-                this.state = 'Manual';
-            }
-        });
+        const ftuePlayed = localStorage.getItem(STORAGE_KEYS.showFtue);
+        if (ftuePlayed) {
+            this.state = 'Manual';
+        } else {
+            this.state = 'Auto';
+            this.eventEmitter.on('player.dragged', () => {
+                if (this.state === 'Auto') {
+                    this.state = 'Manual';
+                    localStorage.setItem(STORAGE_KEYS.showFtue, 'true');
+                }
+            });
+        }
     }
 
     resize(width, height) {

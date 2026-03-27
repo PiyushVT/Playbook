@@ -1,4 +1,5 @@
 import Main from "../Main.js";
+import { STORAGE_KEYS } from "../../sources.js";
 
 export default class HealthBarManager {
     constructor() {
@@ -52,21 +53,25 @@ export default class HealthBarManager {
         this.segments = segments;
         this.hasAnimated = false;
 
-        if (!this.listenerAdded) {
-            this.listenerAdded = true;
-            this.eventEmitter.on("player.dragged", () => {
-                if (!this.hasAnimated) {
-                    this.hasAnimated = true;
-                    this.container.style.opacity = "1";
-                    
-                    const step = 1000 / this.segments.length;
-                    this.segments.forEach((el, i) => {
-                        setTimeout(() => {
-                            el.style.transform = "scaleX(1)";
-                        }, i * step);
-                    });
-                }
+        const playAnimation = () => {
+            if (this.hasAnimated) return;
+            this.hasAnimated = true;
+            this.container.style.opacity = "1";
+            const step = 1000 / this.segments.length;
+            this.segments.forEach((el, i) => {
+                setTimeout(() => {
+                    el.style.transform = "scaleX(1)";
+                }, i * step);
             });
+        };
+
+        const ftuePlayed = localStorage.getItem(STORAGE_KEYS.showFtue);
+
+        if (ftuePlayed) {
+            playAnimation();
+        } else if (!this.listenerAdded) {
+            this.listenerAdded = true;
+            this.eventEmitter.on("player.dragged", playAnimation); 
         }
     }
 

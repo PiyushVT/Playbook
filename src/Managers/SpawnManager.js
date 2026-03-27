@@ -2,7 +2,7 @@ import FallingLetter from "../FallingLetter.js";
 import { GAME_CONFIG } from "../../configs/GameConfig.js";
 import Main from "../Main.js";
 import FallingCoin from "../FallingCoin.js";
-import { ASSETS } from "../../sources.js";
+import { ASSETS, STORAGE_KEYS } from "../../sources.js";
 
 export default class SpawnManager {
     constructor(difficultyManager, wordManager, sizes, cloudsSpawner) {
@@ -30,9 +30,15 @@ export default class SpawnManager {
         this.canSpawn = false;
         this.popupShown = false;
 
-        this.eventEmitter.on('player.dragged', () => {
-            this.startSpawning();
-        });
+        const ftuePlayed = localStorage.getItem(STORAGE_KEYS.showFtue);
+        if (ftuePlayed) {
+            this.canSpawn = true;
+            this.popupShown = true;
+        } else {
+            this.eventEmitter.on('player.dragged', () => {
+                this.startSpawning();
+            });
+        }
     }
 
     startSpawning() {

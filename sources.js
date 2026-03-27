@@ -7,3 +7,7 @@ export const ASSETS = {
         popup: './assets/SVG/popup.svg',
     },
 };
+
+export const STORAGE_KEYS = {
+    showFtue: 'wordeFlowShowFTUE',
+};
