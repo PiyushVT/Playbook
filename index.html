@@ -8,6 +8,17 @@
     <meta name="description" content="HTML5 Game Scaffold">
     <title>Word Flow Game</title>
     <link rel="stylesheet" href="styles.css">
+    <script>
+    // This runs completely independently of your modules
+    window.addEventListener('load', function() {
+        var testCanvas = document.getElementById('canvas');
+        var testCtx = testCanvas.getContext('2d');
+        testCanvas.width = window.innerWidth;
+        testCanvas.height = window.innerHeight;
+        testCtx.fillStyle = '#00FF00'; // Pure Green
+        testCtx.fillRect(0, 0, testCanvas.width, testCanvas.height);
+    });
+</script>
     <script src="mraid.js"></script>
     <script>
         // Satisfy Unity Ads static checker which may only scan index.html
