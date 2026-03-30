@@ -196,7 +196,7 @@ export default class Main {
     renderLoading() {
         const { ctx, sizes } = this;
 
-        ctx.fillStyle = '#000';
+        ctx.fillStyle = '#ff0000ff';
         ctx.fillRect(0, 0, sizes.width, sizes.height);
 
         ctx.fillStyle = '#fff';
