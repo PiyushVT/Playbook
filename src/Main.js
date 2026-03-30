@@ -106,10 +106,12 @@ export default class Main {
 
     addEventListeners() {
         window.addEventListener('resize', this.resize);
+        window.addEventListener('orientationchange', this.resize);
     }
 
     removeEventListeners() {
         window.removeEventListener('resize', this.resize);
+        window.removeEventListener('orientationchange', this.resize);
     }
 
     resize() {
