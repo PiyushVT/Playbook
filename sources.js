@@ -11,3 +11,5 @@ export const ASSETS = {
 export const STORAGE_KEYS = {
     showFtue: 'wordeFlowShowFTUE',
 };
+
+export const CTA_URL = 'https://playbook-zeta-seven.vercel.app/';

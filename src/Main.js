@@ -46,7 +46,10 @@ export default class Main {
         };
 
         this.state = 'loading';
-        this.assets = null; 
+        this.assets = null;
+        
+        this._assetsReady = false;
+        this._startRequested = false;
 
         this.resize = this.resize.bind(this);
         this.loop = this.loop.bind(this);
@@ -65,7 +68,6 @@ export default class Main {
             this.wordLoader = new WordLoader();
             this.uiManager = new UIManager();
             this.uiManager.init();
-            
             this.wordManager = new WordManager(this.wordLoader);
             this.wordManager.start();
             this.difficultyManager = new DifficultyManager(this.wordManager);
@@ -78,10 +80,28 @@ export default class Main {
             this.missedManager = new MissedManager();
             this.feedbackManager = new FeedbackManager();
             this.coinManager = new CoinManager();
-            this.state = 'run';
+            this.state = 'loaded';
+            this._assetsReady = true;
+
+            if (this._startRequested) {
+                this._beginGameplay();
+            }
         });
 
         requestAnimationFrame(this.loop);
+    }
+
+    start() {
+        if (this._assetsReady) {
+            this._beginGameplay();
+        } else {
+            this._startRequested = true;
+        }
+    }
+
+    _beginGameplay() {
+        if (this.state === 'run') return;
+        this.state = 'run';
     }
 
     addEventListeners() {
@@ -146,7 +166,7 @@ export default class Main {
         this.ctx.setTransform(this.sizes.scale, 0, 0, this.sizes.scale, 0, 0);
         this.ctx.clearRect(0, 0, width, height);
 
-        if (this.state === 'loading') {
+        if (this.state === 'loading' || this.state === 'loaded') {
             this.renderLoading();
             return;
         }

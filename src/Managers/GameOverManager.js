@@ -1,4 +1,6 @@
 import Main from "../Main.js";
+import MraidBridge from "../MraidBridge.js";
+import { CTA_URL } from "../../sources.js";
 
 export default class GameOverManager {
     constructor() {
@@ -17,7 +19,7 @@ export default class GameOverManager {
         }
 
         this.replayButton.addEventListener('click', () => {
-            window.location.reload();
+            MraidBridge.open(CTA_URL);
         });
     }
 
