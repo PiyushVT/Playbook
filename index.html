@@ -6,19 +6,7 @@
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="description" content="HTML5 Game Scaffold">
-    <title>Word Flow Game</title>
-    <link rel="stylesheet" href="styles.css">
-    <script>
-    // This runs completely independently of your modules
-    window.addEventListener('load', function() {
-        var testCanvas = document.getElementById('canvas');
-        var testCtx = testCanvas.getContext('2d');
-        testCanvas.width = window.innerWidth;
-        testCanvas.height = window.innerHeight;
-        testCtx.fillStyle = '#00FF00'; // Pure Green
-        testCtx.fillRect(0, 0, testCanvas.width, testCanvas.height);
-    });
-</script>
+    <title>Word Flow Game</title>
     <script src="mraid.js"></script>
     <script>
         // Satisfy Unity Ads static checker which may only scan index.html
@@ -28,6 +16,8 @@
             }
         }
     </script>
+  <script type="module" crossorigin src="/assets/index-BiIGXFXE.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-DQ4xz1Rj.css">
 </head>
 
 <body>
@@ -76,7 +66,7 @@
                                 COMPLETE
                             </span>
 
-                            <img src="./assets/sprites/cloud-1.webp" class="cloud-imgs cloud-img1">
+                            <img src="/assets/cloud-1-BAPd5P8i.webp" class="cloud-imgs cloud-img1">
                         </div>
 
                         <div class="score-text-div">
@@ -105,8 +95,7 @@
             </div>
         </div>
         <canvas id="canvas"></canvas>
-    </div>
-    <script src="./script.js" type="module"></script>
+    </div>
 </body>
 
 </html>
