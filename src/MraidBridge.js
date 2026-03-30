@@ -13,7 +13,7 @@ const MraidBridge = (() => {
                 return resolve();
             }
 
-            if (mraid.getState() === 'default') {
+            if (mraid.getState() !== 'loading') { // NOT loading means it's ready
                 return resolve();
             }
 
